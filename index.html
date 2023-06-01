@@ -7,7 +7,7 @@
         <title>Document</title>
     </head>
     <body>
-        <div style="width: 800px; height: 460px">
+        <div style="width: 800px; height: 460px; max-width: 100%">
             <canvas id="myChart"></canvas>
         </div>
 
@@ -23,25 +23,33 @@
                     const {
                         ctx,
                         chartArea: { width, height },
+                        scales: { r },
                     } = chart;
 
                     // get center coordinates
-                    const centerX = width / 2;
-                    const centerY = height / 2;
+                    const centerX = r.getPointPositionForValue(0, -2).x;
+                    const centerY = r.getPointPositionForValue(0, -2).y;
 
                     const numLines = 10;
 
                     // angle degrees between lines
                     const angleIncrement = (2 * 3.14) / numLines;
 
-                    // Line length (manual for the time being, derived from container max height)
-                    const lineLength = 208;
-
                     // initial angle to vertically center the first line
                     const initialAngle = 92.05;
 
                     // Draw the lines
                     for (let i = 0; i < numLines; i++) {
+                        // get center coords at -2
+                        console.log(r.getPointPositionForValue(0, -2));
+
+                        const point = r.getPointPositionForValue(0, 10);
+                        const lineLength =
+                            Math.sqrt(
+                                Math.pow(centerX - point.x, 2) +
+                                    Math.pow(centerY - point.y, 2)
+                            ) + 2;
+
                         // get current line angle (start 90deg)
                         const angle = initialAngle + i * angleIncrement;
 
